@@ -1,0 +1,27 @@
+{
+  "name": "consequences-datetime",
+  "description": "Provides the system date and time to Consequences",
+  "author": "Joseph Duffy",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "gulp build"
+  },
+  "license": "MIT",
+  "repository": "git+https://github.com/JosephDuffy/consequences-datetime",
+  "keywords": [
+    "consequences-addon"
+  ],
+  "engines": {
+    "node": "^6.10.3",
+    "consequences": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.22",
+    "consequences": "file:///Users/josephduffy/Dropbox/Projects/Personal/Consequences/consequences",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.7",
+    "typescript": "^2.3.3"
+  }
+}
