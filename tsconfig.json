@@ -4,9 +4,13 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "target": "es2015"
-  },
-    "include": [
-        "./src/**/*"
+    "target": "es2015",
+    "typeRoots": [
+      "./node_modules/consequences/types",
+      "./node_modules/@types"
     ]
+  },
+  "include": [
+    "./src/**/*"
+  ]
 }

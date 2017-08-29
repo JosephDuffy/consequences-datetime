@@ -1,74 +1,76 @@
-import { Addon, AddonInitialiser, Metadata, Variable } from "consequences";
-import { EventEmitter } from "events";
+import { Addon, AddonInitialiser, Variable } from 'consequences/addons';
+import { EventEmitter } from 'events';
 
 export default class DateTimeInitialiser implements AddonInitialiser {
 
-    readonly name = "Date Time";
+  public readonly name = 'Date Time';
 
-    readonly description = "Provides the system's date and time";
+  public readonly description = 'Provides the system\'s date and time';
 
-    createInstance(metadata: Metadata): Promise<DateTime> {
-        return Promise.resolve(new DateTime(metadata));
-    }
+  public createInstance(metadata: Addon.Metadata, configOptions?: { [id: string]: any; }): Promise<DateTime> {
+    return Promise.resolve(new DateTime(metadata));
+  }
 
 }
 
 export class DateTime implements Addon {
 
-    metadata: Metadata;
+  public metadata: Addon.Metadata;
 
-    get variables(): Variable[] {
-        return [this.dateTime]
-    }
+  get variables(): Promise<Variable[]> {
+    return Promise.resolve([this.dateTime]);
+  }
 
-    private dateTime: DateTimeVariable;
+  private dateTime: DateTimeVariable;
 
-    constructor(metadata: Metadata) {
-        this.metadata = metadata;
-        this.dateTime = new DateTimeVariable();
-    }
+  constructor(metadata: Addon.Metadata) {
+    this.metadata = metadata;
+    this.dateTime = new DateTimeVariable();
+  }
 
 }
 
 class DateTimeVariable extends EventEmitter implements Variable {
 
-    readonly name = "System Date and Time";
+  public readonly uniqueId = 'system';
 
-    get currentValue(): Date {
-        return new Date();
+  public readonly name = 'System Date and Time';
+
+  get currentValue(): Date {
+    return new Date();
+  }
+
+  private timer: NodeJS.Timer;
+
+  constructor() {
+    super();
+  }
+
+  public addChangeEventListener(listener: () => void) {
+    super.addListener('dateTimeChanged', listener);
+
+    if (super.listenerCount('dateTimeChanged') === 1) {
+      this.startFiringEvents();
     }
+  }
 
-    private timer: NodeJS.Timer;
+  public removeChangeEventListener(listener: () => void) {
+    super.removeListener('dateTimeChanged', listener);
 
-    constructor() {
-        super()
+    if (super.listenerCount('dateTimeChanged') === 0) {
+      this.stopFiringEvents();
     }
+  }
 
-    addChangeEventListener(listener: Function) {
-        super.addListener("dateTimeChanged", listener);
+  private startFiringEvents() {
+    this.timer = setInterval(() => {
+      this.emit('dateTimeChanged');
+    }, 1000);
+  }
 
-        if (super.listenerCount("dateTimeChanged") === 1) {
-            this.startFiringEvents();
-        }
-    }
-
-    removeChangeEventListener(listener: Function) {
-        super.removeListener("dateTimeChanged", listener);
-
-        if (super.listenerCount("dateTimeChanged") === 0) {
-            this.stopFiringEvents();
-        }
-    }
-
-    private startFiringEvents() {
-        this.timer = setInterval(() => {
-            this.emit("dateTimeChanged");
-        }, 1000);
-    }
-
-    private stopFiringEvents() {
-        clearInterval(this.timer);
-        this.timer = null;
-    }
+  private stopFiringEvents() {
+    clearInterval(this.timer);
+    this.timer = null;
+  }
 
 }
