@@ -4,6 +4,7 @@
   "author": "Joseph Duffy",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "preferGlobal": true,
   "scripts": {
     "postinstall": "npm run build",
     "build": "tsc",
@@ -20,7 +21,7 @@
     "consequences": "^0.1.0"
   },
   "devDependencies": {
-    "@types/node": "^7.0.22",
+    "@types/node": "^8.0.28",
     "consequences": "josephduffy/consequences",
     "tslint": "^5.7.0",
     "tslint-misc-rules": "^3.1.3",
